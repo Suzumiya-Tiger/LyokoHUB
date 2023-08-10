@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./src/main.js",
+    "dev": "nodemon --watch src/**/* --delay 1500ms -e ts --exec npm start",
+    "start": "node -r esbuild-register src/main.ts",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -14,15 +15,23 @@
   "license": "ISC",
   "dependencies": {
     "@koa/router": "^12.0.0",
+    "dotenv": "^16.3.1",
     "koa": "^2.14.2",
-    "koa-bodyparser": "^4.4.1"
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^12.0.0"
   },
   "devDependencies": {
+    "@types/koa": "^2.13.8",
+    "@types/koa-bodyparser": "^4.3.10",
+    "@types/koa-router": "^7.4.4",
+    "@types/koa2-cors": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
+    "esbuild-register": "^3.4.2",
     "eslint": "^8.46.0",
-    "husky": "^8.0.0"
+    "husky": "^8.0.0",
+    "typescript": "^5.1.6"
   },
   "config": {
     "commitizen": {
