@@ -12,6 +12,7 @@ Node.js 会立即加载并执行该模块，然后将模块的导出内容赋值
 
 import { connection } from "../app/database";
 import type { userType } from "./index";
+// UserService用于处理MYSQL数据库的相关操作
 class UserService {
   /* 
   使用 any 类型会绕过 TypeScript 类型检查，导致类型不安全。
@@ -32,6 +33,13 @@ class UserService {
      并将其赋值给 result 变量。 */
     const [result] = await connection.execute(statement, [name, password]);
     return result;
+  }
+
+  // 根据用户名查询用户是否存在
+  async findUserByName(name: string) {
+    const statement = "SELECT * FROM `user` WHERE `name` = ?;";
+    const [values] = await connection.execute(statement, [name]);
+    return values;
   }
 }
 const userService = new UserService();
