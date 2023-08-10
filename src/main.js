@@ -1,9 +1,10 @@
-const Koa = require("koa");
-const KoaRouter = require("@koa/router");
-const { SERVER_PORT } = require("./config/server.js");
+import Koa from "koa";
+import KoaRouter from "@koa/router";
+import { SERVER_PORT } from "./config/server.js";
 const app = new Koa();
 const userRouter = new KoaRouter({ prefix: "/users" });
 userRouter.get("/list", (ctx, next) => {
+  console.log(next);
   ctx.body = "userList访问成功！";
 });
 

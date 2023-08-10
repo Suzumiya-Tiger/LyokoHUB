@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./src/main.js"
+    "start": "nodemon ./src/main.js",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +16,8 @@
     "@koa/router": "^12.0.0",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.1"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0"
   }
 }
