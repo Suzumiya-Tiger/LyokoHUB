@@ -35,7 +35,11 @@ const handlePassword = async (ctx: Context, next: Next) => {
     // 这一步非常关键，必须检测password是否在ctx.request.body中，否则会报错
     if ("password" in ctx.request.body) {
       ctx.request.body.password = md5Password(password);
+    } else {
+      return;
     }
+  } else {
+    return;
   }
   // 3.执行下一个中间件
   await next();
