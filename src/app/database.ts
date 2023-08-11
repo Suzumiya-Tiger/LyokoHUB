@@ -25,7 +25,6 @@ connectionPool.getConnection((err, connection) => {
         console.log("与数据库连接成功");
       }
     });
-    console.log("连接成功");
   }
 });
 

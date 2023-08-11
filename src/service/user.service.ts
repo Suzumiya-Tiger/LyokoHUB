@@ -11,7 +11,7 @@ Node.js 会立即加载并执行该模块，然后将模块的导出内容赋值
 // const connection = require("../app/database");
 
 import { connection } from "../app/database";
-import type { userType } from "./index";
+import type { userType } from "../types/service";
 // UserService用于处理MYSQL数据库的相关操作
 class UserService {
   /* 

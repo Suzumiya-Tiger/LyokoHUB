@@ -1,6 +1,6 @@
 import { Context } from "koa"; // 导入 Context 类型
 import { userService } from "../service/user.service";
-import type { userType } from "../service";
+import type { userType } from "../types/service";
 
 class UserController {
   async create(ctx: Context) {
