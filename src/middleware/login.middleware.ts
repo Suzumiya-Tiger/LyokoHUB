@@ -1,13 +1,16 @@
 import {
   NAME_OR_PASSWORD_IS_REQUIRED,
   NAME_IS_NOT_EXISTS,
-  PASSWORD_IS_INCORRENT
+  PASSWORD_IS_INCORRENT,
+  UN_AUTHORIZATION
 } from "../config/error-constants";
+import jwt from "jsonwebtoken";
 import { Context, Next } from "koa"; // 导入 Context,Next 类型
 import type { userType } from "../types/service";
 import { userService } from "../service/user.service";
 import { md5Password } from "../utils/md5-password";
 import type { IUser } from "../types/user";
+import { PUBLIC_KEY } from "../config/secret";
 const verifyLogin = async (ctx: Context, next: Next) => {
   const { name, password } = ctx.request.body as userType;
   // 1.判断相关的数据逻辑(是否已存在/为空/格式问题等等)
@@ -22,7 +25,6 @@ const verifyLogin = async (ctx: Context, next: Next) => {
   if (Array.isArray(users) && users.length > 0) {
     user = users[0] as IUser;
   }
-  console.log(user);
   if (!user) {
     return ctx.app.emit("error", NAME_IS_NOT_EXISTS, ctx);
   }
@@ -37,5 +39,23 @@ const verifyLogin = async (ctx: Context, next: Next) => {
   // 5.验证通过，执行next进入令牌颁发中间件
   await next();
 };
-
-export { verifyLogin };
+const verifyAuth = async (ctx: Context, next: Next) => {
+  // 1.获取用户传递的token
+  const authorization = ctx.headers.authorization;
+  // "Bearer "=>切记！！！！！！！这里的Bearer后面有一个空格！！！！！！！
+  const token = authorization.replace("Bearer ", "");
+  // 2.验证token是否有效
+  try {
+    // 2.1获取token的信息
+    const result = jwt.verify(token, PUBLIC_KEY, {
+      algorithms: ["RS256"]
+    });
+    // 2.2将token的信息存入ctx中
+    ctx.user = result;
+    // 3.执行next进入下一个中间件
+    await next();
+  } catch (error) {
+    ctx.app.emit("error", UN_AUTHORIZATION, ctx);
+  }
+};
+export { verifyLogin, verifyAuth };

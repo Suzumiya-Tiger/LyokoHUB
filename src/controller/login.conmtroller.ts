@@ -5,16 +5,23 @@ import { PRIVATE_KEY } from "../config/secret";
 class LoginController {
   // 签发令牌,传入token
   sign(ctx: Context) {
-    // 1.获取用户信息
-    const { id, name } = ctx.user;
-    // 2.颁发token令牌
-    const token = jwt.sign({ id, name }, PRIVATE_KEY, {
-      // 令牌有效期为24小时
-      expiresIn: 24 * 60 * 60,
-      algorithm: "RS256"
-    });
-    // 3.返回用户信息
-    ctx.body = { code: 0, data: { token, id, name } };
+    try {
+      // 1.获取用户信息
+      const { id, name } = ctx.user;
+      // 2.颁发token令牌
+      const token = jwt.sign({ id, name }, PRIVATE_KEY, {
+        // 令牌有效期为24小时
+        expiresIn: 24 * 60 * 60,
+        algorithm: "RS256"
+      });
+      // 3.返回用户信息
+      ctx.body = { code: 0, data: { id, name, token } };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  test(ctx: Context) {
+    ctx.body = "验证身份通过！";
   }
 }
 const loginController = new LoginController();

@@ -91,3 +91,13 @@ pnpm install koa-router --save
 ### 密码加密操作
 
 基于md5的16进制进行密码加密入库
+
+### 对typeScript的支持
+
+在package.json中使用ts-node来加载该项目下的typeScript文件
+
+```javascript
+"dev": "nodemon --watch src/**/* --delay 1500ms -e ts --exec npm start",
+"start": "ts-node --esm -r esbuild-register src/main.ts",
+```
+

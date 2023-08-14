@@ -3,7 +3,8 @@ import {
   NAME_OR_PASSWORD_IS_REQUIRED,
   NAME_IS_ALREADY_EXISTS,
   NAME_IS_NOT_EXISTS,
-  PASSWORD_IS_INCORRENT
+  PASSWORD_IS_INCORRENT,
+  UN_AUTHORIZATION
 } from "../config/error-constants";
 export function setupErrorHandlers() {
   // app.on的事件监听器是非常灵活的，可以在其他的中间件通过ctx.app.emit触发，
@@ -27,6 +28,11 @@ export function setupErrorHandlers() {
       case PASSWORD_IS_INCORRENT:
         code = -1004;
         message = "密码错误，请重新输入";
+        break;
+      case UN_AUTHORIZATION:
+        code = -1005;
+        message = "无效的token";
+        break;
     }
     ctx.body = { code, message };
   });

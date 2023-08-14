@@ -3,8 +3,7 @@
 // 必须安装@types/koa @types/koa-router @types/koa2-cors @types/koa-bodyparser 使得可以在KOA中使用TS
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import userRouter from "../router/user.router";
-import loginRouter from "../service/login.router";
+import registerRouter from "../router";
 // 1.创建app
 const app = new Koa();
 // 2.对app使用中间件
@@ -13,10 +12,12 @@ const app = new Koa();
 // bodyParser可以将post请求的数据解析到ctx.request.body中
 
 app.use(bodyParser());
-app.use(userRouter.routes());
+registerRouter(app);
+
+/* app.use(userRouter.routes());
 app.use(loginRouter.routes());
 app.use(userRouter.allowedMethods());
-app.use(loginRouter.allowedMethods());
+app.use(loginRouter.allowedMethods()); */
 
 // 3.导出app
 export default app;
