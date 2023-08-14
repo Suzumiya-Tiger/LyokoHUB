@@ -1,3 +1,5 @@
+// 本文件是为了建立数据库和数据的连接使用
+
 /* 在 Node.js 中，require 是一种同步加载模块的方式，
 而 import 是一种异步加载 ES6 模块的方式。这就是为什么在使用 require 时，
 被导入的模块会立即执行，而在使用 import 时，被导入的模块不会立即执行。
@@ -14,12 +16,6 @@ import { connection } from "../app/database";
 import type { userType } from "../types/service";
 // UserService用于处理MYSQL数据库的相关操作
 class UserService {
-  /* 
-  使用 any 类型会绕过 TypeScript 类型检查，导致类型不安全。
-使用 unknown 类型可以确保在操作前进行类型检查，增强类型安全性。
-在可行的情况下，尽量避免使用 any，而是选择使用 unknown 或其他更具体的类型来处理类型不确定的情况。
-  */
-
   // 将user对象保存到数据库之中;
   async create(user: userType) {
     // 1.获取用户user

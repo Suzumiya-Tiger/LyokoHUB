@@ -4,7 +4,7 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import userRouter from "../router/user.router";
-
+import loginRouter from "../service/login.router";
 // 1.创建app
 const app = new Koa();
 // 2.对app使用中间件
@@ -14,7 +14,9 @@ const app = new Koa();
 
 app.use(bodyParser());
 app.use(userRouter.routes());
+app.use(loginRouter.routes());
 app.use(userRouter.allowedMethods());
+app.use(loginRouter.allowedMethods());
 
 // 3.导出app
 export default app;
