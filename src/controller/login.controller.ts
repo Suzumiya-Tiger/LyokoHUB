@@ -1,7 +1,7 @@
 import { Context } from "koa"; // 导入 Context 类型
 import jwt from "jsonwebtoken";
 import { PRIVATE_KEY } from "../config/secret";
-// 该文件用于在登录验证均通过时，颁发令牌=
+// 该文件用于在登录验证均通过时，颁发令牌
 class LoginController {
   // 签发令牌,传入token
   sign(ctx: Context) {

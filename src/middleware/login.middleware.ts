@@ -34,15 +34,18 @@ const verifyLogin = async (ctx: Context, next: Next) => {
   }
   // 3.将user信息存入ctx中
   ctx.user = user;
-  // 4.颁发令牌，传入token
-
-  // 5.验证通过，执行next进入令牌颁发中间件
+  // 4.验证通过，执行next进入令牌颁发中间件
+  // 下一个中间件的职能：颁发令牌，传入token=> 在login.controller.ts中进行验证
   await next();
 };
+// //verfityAuth用于验证token的有效性
 const verifyAuth = async (ctx: Context, next: Next) => {
   // 1.获取用户传递的token
   const authorization = ctx.headers.authorization;
   // "Bearer "=>切记！！！！！！！这里的Bearer后面有一个空格！！！！！！！
+  if (!authorization) {
+    return ctx.app.emit("error", UN_AUTHORIZATION, ctx);
+  }
   const token = authorization.replace("Bearer ", "");
   // 2.验证token是否有效
   try {

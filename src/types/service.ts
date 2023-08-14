@@ -3,4 +3,5 @@ export interface userType {
   password?: string;
   createAt?: string;
   updateAt?: string;
+  content?: string;
 }
