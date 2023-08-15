@@ -34,6 +34,11 @@ FROM moment m
     const [result] = await connection.execute(statement, [id]);
     return result;
   }
+  async update(content: string, id: number) {
+    const statement = "UPDATE moment SET content=? WHERE id=?;";
+    const [result] = await connection.execute(statement, [content, id]);
+    return result;
+  }
 }
 const momentService = new MomentService();
 export { momentService };

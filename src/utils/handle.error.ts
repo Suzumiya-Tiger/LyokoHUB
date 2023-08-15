@@ -4,7 +4,8 @@ import {
   NAME_IS_ALREADY_EXISTS,
   NAME_IS_NOT_EXISTS,
   PASSWORD_IS_INCORRENT,
-  UN_AUTHORIZATION
+  UN_AUTHORIZATION,
+  OPERATION_IS_NOT_PERMITTED
 } from "../config/error-constants";
 export function setupErrorHandlers() {
   // app.on的事件监听器是非常灵活的，可以在其他的中间件通过ctx.app.emit触发，
@@ -32,6 +33,10 @@ export function setupErrorHandlers() {
       case UN_AUTHORIZATION:
         code = -1005;
         message = "无效的token";
+        break;
+      case OPERATION_IS_NOT_PERMITTED:
+        code = -1006;
+        message = "您没有权限进行此操作";
         break;
     }
     ctx.body = { code, message };

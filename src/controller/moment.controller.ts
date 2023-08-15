@@ -40,6 +40,19 @@ class MomentController {
       data: Array.isArray(result) ? result[0] : result
     };
   }
+  async update(ctx: Context) {
+    // 1.获取需要修改的动态的id
+    const { momentId } = ctx.params;
+    // 2.获取修改的内容
+    const { content } = ctx.request.body as userType;
+    // 3.执行数据库操作
+    const result = await momentService.update(content, momentId);
+    ctx.body = {
+      code: 0,
+      message: "修改动态成功",
+      data: result
+    };
+  }
 }
 const momentController = new MomentController();
 export { momentController };
