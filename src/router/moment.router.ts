@@ -8,4 +8,5 @@ const momentRouter = new KoaRouter({ prefix: "/moment" });
 momentRouter.post("/", verifyAuth, momentController.create);
 // 获取动态列表无需验证用户身份
 momentRouter.get("/list", momentController.getList);
+momentRouter.get("/:momentId", momentController.detail);
 export default momentRouter;

@@ -28,6 +28,18 @@ class MomentController {
       data: result
     };
   }
+  async detail(ctx: Context) {
+    // 1.获取动态的id
+    // 对应get请求的params携带参数方式，直接从ctx.params中获取对应的参数即可
+    const { momentId } = ctx.params;
+    // 2.根据id查询动态详情
+    const result = await momentService.queryById(momentId);
+    // 3.返回数据
+    ctx.body = {
+      code: 0,
+      data: Array.isArray(result) ? result[0] : result
+    };
+  }
 }
 const momentController = new MomentController();
 export { momentController };
