@@ -16,6 +16,18 @@ class MomentController {
       data: result
     };
   }
+  async getList(ctx: Context) {
+    // 获取offset/size
+    const { offset, size, keyword } = ctx.query;
+    // 从数据库中查询动态列表
+    const result = await momentService.queryList(offset, size, keyword);
+
+    // 返回数据
+    ctx.body = {
+      code: 0,
+      data: result
+    };
+  }
 }
 const momentController = new MomentController();
 export { momentController };
