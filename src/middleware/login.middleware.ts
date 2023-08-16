@@ -58,6 +58,15 @@ const verifyAuth = async (ctx: Context, next: Next) => {
     // 3.执行next进入下一个中间件
     await next();
   } catch (error) {
+    /**
+     * 在 Koa 中，中间件可以被串联成一个处理链（middleware chain）。
+     * 每个中间件通过调用 await next() 来执行下一个中间件。
+     * 如果一个中间件内部发生了错误（抛出了异常），并且这个异常没有被内部处理（try-catch），
+     * 那么它会向上一层的调用堆栈传递，
+     * 直到被 Koa 框架内部的错误处理机制捕捉到，然后触发 app.emit("error", error, ctx)
+     *
+     * 所以如果下一个中间件出现了错误，它又没有错误处理机制，那么就会返回到这个调用堆栈进行错误捕捉和处理
+     */
     ctx.app.emit("error", UN_AUTHORIZATION, ctx);
   }
 };

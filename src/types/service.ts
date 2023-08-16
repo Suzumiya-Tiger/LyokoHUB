@@ -5,4 +5,5 @@ export interface userType {
   updateAt?: string;
   content?: string;
   momentId?: string;
+  commentId?: string;
 }
