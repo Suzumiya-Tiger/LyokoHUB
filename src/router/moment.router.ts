@@ -12,7 +12,12 @@ momentRouter.post("/", verifyAuth, momentController.create);
 momentRouter.get("/list", momentController.getList);
 momentRouter.get("/:momentId", momentController.detail);
 // 3.删：删除动态
-
+momentRouter.delete(
+  "/:momentId",
+  verifyAuth,
+  verifyMomentPermission,
+  momentController.removeDetail
+);
 // 4.改：修改动态
 // 需要验证：登录的用户方可修改动态
 momentRouter.patch(

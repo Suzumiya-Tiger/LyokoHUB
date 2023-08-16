@@ -53,6 +53,17 @@ class MomentController {
       data: result
     };
   }
+  async removeDetail(ctx: Context) {
+    // 1.获取删除动态的id
+    const { momentId } = ctx.params;
+    // 2.执行数据库操作
+    const result = await momentService.removeDetail(momentId);
+    ctx.body = {
+      code: 0,
+      message: "删除动态成功",
+      data: result
+    };
+  }
 }
 const momentController = new MomentController();
 export { momentController };

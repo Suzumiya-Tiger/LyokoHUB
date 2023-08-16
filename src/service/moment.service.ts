@@ -39,6 +39,11 @@ FROM moment m
     const [result] = await connection.execute(statement, [content, id]);
     return result;
   }
+  async removeDetail(id: number) {
+    const statement = "DELETE FROM moment WHERE id = ?;";
+    const [result] = await connection.execute(statement, [id]);
+    return result;
+  }
 }
 const momentService = new MomentService();
 export { momentService };
