@@ -5,7 +5,8 @@ import {
   NAME_IS_NOT_EXISTS,
   PASSWORD_IS_INCORRENT,
   UN_AUTHORIZATION,
-  OPERATION_IS_NOT_PERMITTED
+  OPERATION_IS_NOT_PERMITTED,
+  DATA_IS_NOT_EXIST
 } from "../config/error-constants";
 export function setupErrorHandlers() {
   // app.on的事件监听器是非常灵活的，可以在其他的中间件通过ctx.app.emit触发，
@@ -37,6 +38,10 @@ export function setupErrorHandlers() {
       case OPERATION_IS_NOT_PERMITTED:
         code = -1006;
         message = "您没有权限进行此操作";
+        break;
+      case DATA_IS_NOT_EXIST:
+        code = -1007;
+        message = "您操作的该条数据不存在";
         break;
     }
     ctx.body = { code, message };
