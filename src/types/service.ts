@@ -4,4 +4,5 @@ export interface userType {
   createAt?: string;
   updateAt?: string;
   content?: string;
+  momentId?: string;
 }
