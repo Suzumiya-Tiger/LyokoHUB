@@ -17,6 +17,17 @@ class LabelController {
       data: result
     };
   }
+  async getList(ctx: Context) {
+    // 获取offset/size
+    const { offset, size } = ctx.query;
+    // 从数据库中查询动态列表
+    const [result] = await labelService.queryList(offset, size);
+    // 返回数据
+    ctx.body = {
+      code: 0,
+      data: result
+    };
+  }
 }
 const labelController = new LabelController();
 export { labelController };

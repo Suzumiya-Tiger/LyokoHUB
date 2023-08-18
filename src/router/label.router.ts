@@ -5,4 +5,5 @@ import { verifyLabel } from "../middleware/label.middleware";
 
 const labelRouter = new KoaRouter({ prefix: "/label" });
 labelRouter.post("/", verifyAuth, verifyLabel, labelController.create);
+labelRouter.get("/", labelController.getList);
 export default labelRouter;

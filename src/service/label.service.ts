@@ -11,6 +11,11 @@ class LabelService {
     const statement = `INSERT INTO label (name) VALUES (?);`;
     connection.execute(statement, [name]);
   }
+  queryList(offset: string | string[] = "0", size: string | string[] = "10") {
+    console.log(offset, size);
+    const statement = `SELECT * FROM label LIMIT ?,?;`;
+    return connection.execute(statement, [offset, size]);
+  }
 }
 const labelService = new LabelService();
 export { labelService };
