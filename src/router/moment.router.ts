@@ -17,9 +17,16 @@ momentRouter.delete(
   "/:momentId",
   verifyAuth,
   verifyPermission,
+  momentController.checkIsExist,
   momentController.removeDetail
 );
 // 4.改：修改动态
 // 需要验证：登录的用户方可修改动态
-momentRouter.patch("/:momentId", verifyAuth, verifyPermission, momentController.update);
+momentRouter.patch(
+  "/:momentId",
+  verifyAuth,
+  verifyPermission,
+  momentController.checkIsExist,
+  momentController.update
+);
 export default momentRouter;

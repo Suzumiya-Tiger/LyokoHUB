@@ -1,8 +1,27 @@
-import { Context } from "koa"; // 导入 Context 类型
+import { Context, Next } from "koa"; // 导入 Context 类型
 import type { userType } from "../types/service";
 import { momentService } from "../service/moment.service";
+import { DATA_IS_NOT_EXIST } from "../config/error-constants";
 
 class MomentController {
+  /* 
+    // 查询当前数据表是否存在该条数据
+  const isExist = await permissionService.checkExist(resourceName, resourceId);
+  if (!isExist) {
+    return ctx.app.emit("error", DATA_IS_NOT_EXIST, ctx);
+  } */
+  async checkIsExist(ctx: Context, next: Next) {
+    const { momentId } = ctx.params;
+    const { id } = ctx.user;
+
+    const result = await momentService.search(momentId, id);
+    console.log(result);
+    if (Array.isArray(result) && !!result.length) {
+      await next();
+    } else {
+      return ctx.app.emit("error", DATA_IS_NOT_EXIST, ctx);
+    }
+  }
   async create(ctx: Context) {
     //   1.获取动态的内容
     const { content } = ctx.request.body as userType;
@@ -35,10 +54,14 @@ class MomentController {
     // 2.根据id查询动态详情
     const result = await momentService.queryById(momentId);
     // 3.返回数据
-    ctx.body = {
-      code: 0,
-      data: Array.isArray(result) ? result[0] : result
-    };
+    if (Array.isArray(result) && !!result.length) {
+      ctx.body = {
+        code: 0,
+        data: Array.isArray(result) ? result[0] : result
+      };
+    } else {
+      return ctx.app.emit("error", DATA_IS_NOT_EXIST, ctx);
+    }
   }
   async update(ctx: Context) {
     // 1.获取需要修改的动态的id

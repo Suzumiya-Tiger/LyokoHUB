@@ -46,26 +46,6 @@ const verifyAuth = async (ctx: Context, next: Next) => {
   if (!authorization) {
     return ctx.app.emit("error", UN_AUTHORIZATION, ctx);
   }
-  /*   // 验证是否存在该条数据
-  const requestBody = ctx.request.body as userType;
-
-  // 确保 requestBody 是一个对象
-  if (typeof requestBody === "object" && requestBody !== null) {
-    // 获取第一个属性名
-    const keyName = Object.keys(requestBody)[0];
-
-    if (keyName in requestBody) {
-      const resourceId = requestBody[keyName];
-      const resourceName = keyName.replace("Id", "");
-
-      // 查询当前数据表是否存在该条数据
-      const isExist = await permissionService.checkExist(resourceName, resourceId);
-
-      if (!isExist) {
-        return ctx.app.emit("error", DATA_IS_NOT_EXIST, ctx);
-      }
-    }
-  } */
 
   const token = authorization.replace("Bearer ", "");
   // 2.验证token是否有效

@@ -1,6 +1,11 @@
 import { connection } from "../app/database";
 
 class MomentService {
+  async search(id: string, userId: string) {
+    const statement = `SELECT * FROM moment WHERE id=? AND user_id=?;`;
+    const [result] = await connection.execute(statement, [id, userId]);
+    return result;
+  }
   async create(content: string, userId: number) {
     const statement = "INSERT INTO moment(content,user_id) VALUES(?,?);";
     const result = await connection.execute(statement, [content, userId]);

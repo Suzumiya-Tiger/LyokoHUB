@@ -1,5 +1,5 @@
 import { Context, Next } from "koa";
-import { OPERATION_IS_NOT_PERMITTED, DATA_IS_NOT_EXIST } from "../config/error-constants";
+import { OPERATION_IS_NOT_PERMITTED } from "../config/error-constants";
 import { permissionService } from "../service/permission.service";
 // 验证权限方法的第一种多种表适配方法
 /* const verifyPermission = function (resource) {
@@ -27,11 +27,7 @@ const verifyPermission = async (ctx: Context, next: Next) => {
   // keyName=>momentId
   const resourceId = ctx.params[keyName];
   const resourceName = keyName.replace("Id", "");
-  // 查询当前数据表是否存在该条数据
-  const isExist = await permissionService.checkExist(resourceName, resourceId);
-  if (!isExist) {
-    return ctx.app.emit("error", DATA_IS_NOT_EXIST, ctx);
-  }
+
   // 2.查询user的id(user_id)是否有修改momentId的权限
   const isPermission = await permissionService.checkResource(
     resourceName,
@@ -44,4 +40,5 @@ const verifyPermission = async (ctx: Context, next: Next) => {
   // 执行下一个中间件
   await next();
 };
+
 export default verifyPermission;
