@@ -20,7 +20,8 @@ class MomentService {
     const statement = `SELECT
 	m.id id,m.content content,m.createAt createTime,m.updateAt updateTime,
 	JSON_OBJECT("id",u.id,'name',u.name,'createTime',u.createAt,'updateTime',u.updateAt) user,
-   (SELECT COUNT(*) FROM comment WHERE comment.moment_id=m.id) commentCount
+   (SELECT COUNT(*) FROM comment WHERE comment.moment_id=m.id) commentCount,
+     (SELECT COUNT(*) FROM moment_label ml WHERE ml.moment_id=m.id) labelCount
 FROM moment m
 	LEFT JOIN user u ON u.id = m.user_id 
    WHERE 1=1 ${keywordCondition} 
