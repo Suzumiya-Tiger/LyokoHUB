@@ -11,6 +11,12 @@
 // }
 {
     "compilerOptions": {
+        "types": [
+            "node",
+            "koa",
+            "koa-router",
+            "@types/koa-multer"
+        ],
         //         // 必加！解决Module can only be default-imported using esModuleInterop flag 报错
         "esModuleInterop": true,
         "module": "commonjs", // 编译生成的模块系统代码
