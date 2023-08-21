@@ -11,6 +11,11 @@ class FileService {
     ]);
     return result;
   }
+  async queryAvatarWithUserId(userId: number) {
+    const statement = `SELECT * FROM avatar WHERE user_id=?;`;
+    const [result] = await connection.execute(statement, [userId]);
+    if (Array.isArray(result)) return result.pop();
+  }
 }
 const fileService = new FileService();
 export { fileService };
