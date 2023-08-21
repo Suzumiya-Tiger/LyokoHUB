@@ -5,8 +5,6 @@ class LabelController {
   async create(ctx: Context) {
     // 1.获取标签名称
     const { name } = ctx.request.body as userType;
-    console.log(name);
-
     // 2.操作数据库存储name
     const result = await labelService.create(name);
 

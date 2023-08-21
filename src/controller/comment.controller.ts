@@ -8,7 +8,6 @@ class CommentController {
     const { id } = ctx.user;
 
     const result = await commentService.search(momentId, id);
-    console.log(result);
     if (Array.isArray(result) && !!result.length) {
       await next();
     } else {

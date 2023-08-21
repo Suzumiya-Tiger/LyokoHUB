@@ -45,11 +45,23 @@ export function setupErrorHandlers() {
         code = -1007;
         message = "您操作的该条数据不存在";
         break;
-      case LABEL_IS_ALREADY_EXISTS:
-        message = "标签已存在,无法注册";
-        break;
+
       case LABEL_IS_NOT_EXIST:
+        code = -1009;
         message = "请输入正确的标签名称";
+        break;
+    }
+    ctx.body = { code, message };
+  });
+}
+export function setupArrayErrorHandlers() {
+  app.on("arrayError", (error, ctx) => {
+    let code = 0;
+    let message = "";
+    switch (error[0]) {
+      case LABEL_IS_ALREADY_EXISTS:
+        code = -1008;
+        message = `标签${error[1]}已存在,无法注册`;
         break;
     }
     ctx.body = { code, message };

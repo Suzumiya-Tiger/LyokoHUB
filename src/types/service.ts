@@ -1,5 +1,5 @@
 export interface userType {
-  [keyName: string]: string;
+  labels?: Array<string>;
   name?: string;
   password?: string;
   createAt?: string;

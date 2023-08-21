@@ -63,6 +63,18 @@ GROUP BY m.id;`;
     const [result] = await connection.execute(statement, [id]);
     return result;
   }
+  async hasLabel(momentId: string, labelId: string) {
+    const statement = `SELECT * FROM moment_label WHERE moment_id=? AND label_id=?;`;
+    const [result] = await connection.execute(statement, [momentId, labelId]);
+    if (Array.isArray(result)) return !!result.length;
+  }
+  // 添加label和moment的id进入moment_label关系表
+
+  async addLabel(momentId: string, labelId: string) {
+    const statement = `INSERT INTO moment_label (moment_id,label_id) VALUES(?,?);`;
+    const [result] = await connection.execute(statement, [momentId, labelId]);
+    return result;
+  }
 }
 const momentService = new MomentService();
 export { momentService };

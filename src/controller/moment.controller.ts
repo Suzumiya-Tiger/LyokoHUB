@@ -6,16 +6,12 @@ import { DATA_IS_NOT_EXIST } from "../config/error-constants";
 class MomentController {
   /* 
     // 查询当前数据表是否存在该条数据
-  const isExist = await permissionService.checkExist(resourceName, resourceId);
-  if (!isExist) {
-    return ctx.app.emit("error", DATA_IS_NOT_EXIST, ctx);
   } */
   async checkIsExist(ctx: Context, next: Next) {
     const { momentId } = ctx.params;
     const { id } = ctx.user;
 
     const result = await momentService.search(momentId, id);
-    console.log(result);
     if (Array.isArray(result) && !!result.length) {
       await next();
     } else {
@@ -86,6 +82,33 @@ class MomentController {
       message: "删除动态成功",
       data: result
     };
+  }
+
+  // 为moment添加标签(label)
+  async addLabels(ctx: Context) {
+    // 1.获取一些参数
+    const labels = ctx.labels;
+    const { momentId } = ctx.params;
+    //  2.将momentId和labelId添加到moment_label关系表之中
+    try {
+      for (const label of labels) {
+        // 2.1判断label_id是否已经和moment_id存在于该条数据之中
+        const isExists = await momentService.hasLabel(momentId, label.id);
+        if (!isExists) {
+          // 2.2.若动态表不存在该label映射，则进行插入操作
+          await momentService.addLabel(momentId, label.id);
+        }
+      }
+      ctx.body = {
+        code: 0,
+        message: "为动态添加标签成功"
+      };
+    } catch (error) {
+      ctx.body = {
+        code: -3001,
+        message: "为动态添加标签失败"
+      };
+    }
   }
 }
 const momentController = new MomentController();
