@@ -19,7 +19,7 @@ class MomentService {
     const keywordCondition = keyword ? "AND content LIKE ?" : "";
     const statement = `SELECT
 	m.id id,m.content content,m.createAt createTime,m.updateAt updateTime,
-	JSON_OBJECT("id",u.id,'name',u.name,'createTime',u.createAt,'updateTime',u.updateAt) user,
+	JSON_OBJECT("id",u.id,'name',u.name,'avatarURL',u.avatar_url,'createTime',u.createAt,'updateTime',u.updateAt) user,
    (SELECT COUNT(*) FROM comment WHERE comment.moment_id=m.id) commentCount,
      (SELECT COUNT(*) FROM moment_label ml WHERE ml.moment_id=m.id) labelCount
 FROM moment m
@@ -34,7 +34,7 @@ FROM moment m
   async queryById(id: number) {
     const statement = `SELECT
 	m.id id,m.content content,m.createAt createTime,m.updateAt updateTime,
-	JSON_OBJECT("id",u.id,'name',u.name,'createTime',u.createAt,'updateTime',u.updateAt) user,
+	JSON_OBJECT("id",u.id,'name',u.name,'avatarURL',u.avatar_url,'createTime',u.createAt,'updateTime',u.updateAt) user,
 -- 	通过子查询语句将comment的查询结果独立出来，避免混淆和展开过多的重复结果
 	(
 	SELECT 
@@ -48,12 +48,12 @@ FROM moment m
 	) comments,
 	(
 	JSON_ARRAYAGG(JSON_OBJECT('id',l.id,'name',l.name))
-	) labels
+	) labels 
 FROM moment m
 LEFT JOIN user u ON u.id = m.user_id
 LEFT JOIN moment_label ml ON ml.moment_id=m.id
 LEFT JOIN label l ON ml.label_id=l.id
-WHERE m.id=?
+WHERE m.id=2
 GROUP BY m.id;`;
     const [result] = await connection.execute(statement, [id]);
     return result;
