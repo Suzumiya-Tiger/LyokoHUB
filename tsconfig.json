@@ -1,14 +1,3 @@
-// {
-//     "compilerOptions": {
-//         "target": "ESNext",
-//         "module": "ESNext",
-//         "moduleResolution": "node",
-//         "strict": true,
-//         // 必加！解决Module can only be default-imported using esModuleInterop flag 报错
-//         "esModuleInterop": true,
-//         // ...其他选项
-//     }
-// }
 {
     "compilerOptions": {
         "types": [

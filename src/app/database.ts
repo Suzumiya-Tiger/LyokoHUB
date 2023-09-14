@@ -1,12 +1,18 @@
 import mysql from "mysql2";
-
+import {
+  MYSQL_HOST,
+  MYSQL_USER,
+  MYSQL_PORT,
+  MYSQL_DATABASE,
+  MYSQL_PASSWORD
+} from "../config/server";
 // 1. Create a connection pool
 const connectionPool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  database: "lyokohub",
-  port: 3306,
-  password: "Code+183296",
+  host: MYSQL_HOST,
+  user: MYSQL_USER,
+  database: MYSQL_DATABASE,
+  port: MYSQL_PORT,
+  password: MYSQL_PASSWORD,
   connectionLimit: 5
 });
 
