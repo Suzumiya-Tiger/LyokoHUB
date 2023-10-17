@@ -4,16 +4,22 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import registerRouter from "../router";
+import roleRouter from "../cms/router/role.router";
+import menuRouter from "../cms/router/menu.router";
 // 1.创建app
 const app = new Koa();
-// 2.对app使用中间件
 
+// 2.对app使用中间件
 // bodyParser必须要在router之前使用
 // bodyParser可以将post请求的数据解析到ctx.request.body中
-
 app.use(bodyParser());
 registerRouter(app);
 
+// cms的路由
+app.use(roleRouter.routes());
+app.use(roleRouter.allowedMethods());
+app.use(menuRouter.routes());
+app.use(menuRouter.allowedMethods());
 /* app.use(userRouter.routes());
 app.use(loginRouter.routes());
 app.use(userRouter.allowedMethods());
