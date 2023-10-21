@@ -1,10 +1,15 @@
-import { connection } from "../../app/database";
-import { menuType } from "../../types/menu";
+import { connection } from "../app/database";
+import { menuType } from "../types/menu";
 
 class MenuService {
   async create(menu: menuType) {
     const statement = `INSERT INTO menu SET ?;`;
     const [result] = await connection.query(statement, [menu]);
+    return result;
+  }
+  async delete(menuId: number) {
+    const statement = `DELETE FROM menu WHERE id = ?;`;
+    const [result] = await connection.query(statement, [menuId]);
     return result;
   }
   async wholeMenu() {
@@ -18,6 +23,11 @@ class MenuService {
 	) FROM menu m2 WHERE m1.id = m2.parentId ORDER BY m2.sort) children
 FROM menu m1 
 WHERE m1.type = 1;`;
+    const [result] = await connection.query(statement);
+    return result;
+  }
+  async userMenu() {
+    const statement = `SELECT menuId from role_menu where roleId = ?;`;
     const [result] = await connection.query(statement);
     return result;
   }

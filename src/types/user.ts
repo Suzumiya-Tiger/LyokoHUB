@@ -1,5 +1,13 @@
 export interface IUser {
-  id: string;
-  name: string;
-  password: string;
+  id?: number;
+  name?: string;
+  password?: string;
+  avatar_url?: string;
+  cellphone?: string;
+  departmentId?: number;
+  realname?: string;
+  role_id?: number;
+  offset?: number;
+  size?: number;
+  enable?: boolean;
 }

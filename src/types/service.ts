@@ -1,4 +1,5 @@
 export interface userType {
+  id?: number;
   labels?: Array<string>;
   name?: string;
   password?: string;

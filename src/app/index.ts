@@ -4,8 +4,8 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import registerRouter from "../router";
-import roleRouter from "../cms/router/role.router";
-import menuRouter from "../cms/router/menu.router";
+import roleRouter from "../router/role.router";
+import menuRouter from "../router/menu.router";
 // 1.创建app
 const app = new Koa();
 

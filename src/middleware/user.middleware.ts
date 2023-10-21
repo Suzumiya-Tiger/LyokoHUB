@@ -1,6 +1,6 @@
 import { userService } from "../service/user.service";
 import { Context, Next } from "koa"; // 导入 Context,Next 类型
-import type { userType } from "../types/service";
+import type { IUser } from "../types/user";
 import { md5Password } from "../utils/md5-password";
 
 import {
@@ -11,12 +11,16 @@ const verifyUser = async (ctx: Context, next: Next) => {
   // 1.判断相关的数据逻辑(是否已存在/为空/格式问题等等)
 
   // 1.1为空判断
-  const { name, password } = ctx.request.body as userType;
-  if (!name || !password) {
-    return ctx.app.emit("error", NAME_OR_PASSWORD_IS_REQUIRED, ctx);
+  const { name, password } = ctx.request.body as IUser;
+  if (ctx.request.method !== "PATCH") {
+    if (!name || !password) {
+      return ctx.app.emit("error", NAME_OR_PASSWORD_IS_REQUIRED, ctx);
+    }
   }
+
   // 1.2判断用户名是否已存在
   const isExistUserName = await userService.findUserByName(name);
+
   if (Array.isArray(isExistUserName) && isExistUserName.length > 0) {
     // 在这里处理已存在用户名的情况
     return ctx.app.emit("error", NAME_IS_ALREADY_EXISTS, ctx);
@@ -26,7 +30,11 @@ const verifyUser = async (ctx: Context, next: Next) => {
 };
 const handlePassword = async (ctx: Context, next: Next) => {
   // 1.取出密码
-  const { password } = ctx.request.body as userType;
+  const { password } = ctx.request.body as IUser;
+  if (!password) {
+    await next();
+    return;
+  }
   // 2.对密码进行加密
   // ctx.request.body.password=加密（password）
 

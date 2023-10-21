@@ -13,29 +13,71 @@ Node.js 会立即加载并执行该模块，然后将模块的导出内容赋值
 // const connection = require("../app/database");
 
 import { connection } from "../app/database";
-import type { userType } from "../types/service";
+import type { IUser } from "../types/user";
 // UserService用于处理MYSQL数据库的相关操作
 class UserService {
   // 将user对象保存到数据库之中;
-  async create(user: userType) {
-    // 1.获取用户user
-    const { name, password } = user;
-    // 2.拼接statemnt
-    const statement = "INSERT INTO `user` (name,password) VALUES(?,?);";
+  async create(user: IUser) {
+    const statement = `INSERT INTO user SET ?;`;
+    const [result] = await connection.query(statement, [user]);
 
-    // 3.执行sql语句
-    // connection.excute()是一个异步操作，返回一个promise对象
-    /*      通过 [result] 这种解构赋值写法，你实际上是在从返回的数组中提取第一个元素，
-     并将其赋值给 result 变量。 */
-    const [result] = await connection.execute(statement, [name, password]);
     return result;
   }
-
+  async update(id: number, user: IUser) {
+    // UPDATE 语句的作用是在已存在的行中修改列的值，因此它不支持直接将一个对象映射到列。
+    let statement = "UPDATE `user` SET ";
+    const params = [];
+    // 1.获取用户user
+    let keys: keyof IUser;
+    for (keys in user) {
+      params.push(user[keys]);
+      statement += `${keys} =?,`;
+    }
+    statement = statement.slice(0, -1); // 从开头截取到倒数第二个字符
+    statement += " WHERE id = ?;";
+    const [result] = await connection.execute(statement, [...params, id]);
+    return result;
+  }
+  async delete(id: number) {
+    const statement = "DELETE FROM `user` WHERE `id` = ?;";
+    const [values] = await connection.execute(statement, [id]);
+    return values;
+  }
   // 根据用户名查询用户是否存在
   async findUserByName(name: string) {
     const statement = "SELECT * FROM `user` WHERE `name` = ?;";
     const [values] = await connection.execute(statement, [name]);
     return values;
+  }
+  // 根据用户id查询用户的信息
+  async findUserById(id: number) {
+    const statement =
+      "SELECT name,id,createAt,updateAt,role_id FROM `user` WHERE `id` = ?;";
+    const [values] = await connection.execute(statement, [id]);
+    return values;
+  }
+  async getUserList(userInfo: IUser) {
+    let statement =
+      "SELECT name,id,realname,cellphone,role_id,departmentId,avatar_url,enable FROM `user` WHERE 1=1";
+    const params = [];
+    let keys: keyof IUser;
+    for (keys in userInfo) {
+      if (keys === "size" || keys === "offset") {
+        break;
+      }
+      if (userInfo[keys]) {
+        statement += ` AND ${keys} = ?`;
+        params.push(userInfo[keys]);
+      }
+    }
+    statement += " LIMIT ?,?;";
+    const offset =
+      userInfo.offset || userInfo.offset === 0 ? String(userInfo.offset) : "0";
+    const size = userInfo.size || userInfo.size === 0 ? String(userInfo.size) : "10";
+    params.push(offset);
+    params.push(size);
+    const [result] = await connection.execute(statement, [...params]);
+    return result;
   }
   async updateUserAvatar(avatarUrl: string, userId: number) {
     const statement = `UPDATE user SET avatar_url=? WHERE id = ?;`;

@@ -1,8 +1,8 @@
-import { connection } from "../../app/database";
-import type { userType } from "../../types/service";
-import type { roleMenuType } from "../../types/roleMenu";
+import { connection } from "../app/database";
+import type { userType } from "../types/service";
+import type { roleMenuType } from "../types/roleMenu";
 import menuService from "./menu.service";
-import { menuType } from "../../types/menu";
+import { menuType } from "../types/menu";
 /* 使用connection.query时，传入的参数必须是Number类型，使用execute则传入字符串类型 */
 class RoleService {
   // 将传入的 role 对象插入到数据库的 role 表中
@@ -18,6 +18,23 @@ class RoleService {
   async list(offset: number, size: number) {
     const statement = `SELECT * FROM role LIMIT ?,?;`;
     const [result] = await connection.query(statement, [offset, size]);
+    return result;
+  }
+  // 为人员赋予角色权限
+  async assignUser(roleId: number, userId: number) {
+    // 1.先删除之前的关系
+    const deleteStatement = `DELETE FROM role_user WHERE userId=?;`;
+    await connection.execute(deleteStatement, [roleId]);
+    const updateRoleUserStatement = `
+    INSERT INTO
+    role_user (roleId,userId) VALUES (?,?);`;
+    await connection.execute(updateRoleUserStatement, [roleId, userId]);
+
+    const updateUserStatement = `UPDATE
+    user SET role_id = ?
+    WHERE id = ?;`;
+    const [result] = await connection.query(updateUserStatement, [roleId, userId]);
+
     return result;
   }
   async assignMenu(roleId: number, menuIds: Array<number>) {
@@ -51,6 +68,8 @@ class RoleService {
         const newMenu = [];
         for (const item of menu) {
           if (item.children) {
+            // 看清楚，每次递归调用的时候，都是新建一个newMenu数组，然后将符合条件的item push进去
+            // 所以最终得到的newMenu数组，就是符合条件的item的集合，和原本的menu数组结构一模一样
             item.children = filtermenu(item.children);
           }
           if (menuIds.includes(item.id)) {
@@ -63,6 +82,8 @@ class RoleService {
       return finalMenu;
     }
   }
+
+
 }
 const roleService = new RoleService();
 export { roleService };
