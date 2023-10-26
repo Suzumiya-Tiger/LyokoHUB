@@ -8,7 +8,9 @@ import {
   OPERATION_IS_NOT_PERMITTED,
   DATA_IS_NOT_EXIST,
   LABEL_IS_ALREADY_EXISTS,
-  LABEL_IS_NOT_EXIST
+  LABEL_IS_NOT_EXIST,
+  ROLENAME_IS_ALREADY_EXISTS,
+  ROLENAME_IS_REQUIRED
 } from "../config/error-constants";
 export function setupErrorHandlers() {
   // app.on的事件监听器是非常灵活的，可以在其他的中间件通过ctx.app.emit触发，
@@ -49,6 +51,14 @@ export function setupErrorHandlers() {
       case LABEL_IS_NOT_EXIST:
         code = -1009;
         message = "请输入正确的标签名称";
+        break;
+      case ROLENAME_IS_ALREADY_EXISTS:
+        code = -1010;
+        message = "角色名已存在,无法注册";
+        break;
+      case ROLENAME_IS_REQUIRED:
+        code = -1011;
+        message = "角色名不能为空";
         break;
     }
     ctx.body = { code, message };

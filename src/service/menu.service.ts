@@ -7,6 +7,21 @@ class MenuService {
     const [result] = await connection.query(statement, [menu]);
     return result;
   }
+  async update(id: number, menu: menuType) {
+    // UPDATE 语句的作用是在已存在的行中修改列的值，因此它不支持直接将一个对象映射到列。
+    let statement = "UPDATE `menu` SET ";
+    const params = [];
+    // 1.获取用户user
+    let keys: keyof menuType;
+    for (keys in menu) {
+      params.push(menu[keys]);
+      statement += `${keys} =?,`;
+    }
+    statement = statement.slice(0, -1); // 从开头截取到倒数第二个字符
+    statement += " WHERE id = ?;";
+    const [result] = await connection.execute(statement, [...params, id]);
+    return result;
+  }
   async delete(menuId: number) {
     const statement = `DELETE FROM menu WHERE id = ?;`;
     const [result] = await connection.query(statement, [menuId]);
@@ -26,10 +41,10 @@ WHERE m1.type = 1;`;
     const [result] = await connection.query(statement);
     return result;
   }
-  async userMenu() {
-    const statement = `SELECT menuId from role_menu where roleId = ?;`;
-    const [result] = await connection.query(statement);
-    return result;
+  async findMenuById(id: number) {
+    const statement = "SELECT * FROM `menu` WHERE `id` = ?;";
+    const [values] = await connection.execute(statement, [id]);
+    return values;
   }
 }
 

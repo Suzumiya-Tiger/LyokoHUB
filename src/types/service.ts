@@ -8,4 +8,5 @@ export interface userType {
   content?: string;
   momentId?: string;
   commentId?: string;
+  menuList?: number[];
 }

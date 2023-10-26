@@ -18,10 +18,37 @@ class RoleController {
     };
   }
   async remove(ctx: Context) {
-    ctx.body = "创建成功";
+    const { roleId } = ctx.params;
+    const result = await roleService.delete(Number(roleId));
+    ctx.body = {
+      message: "删除成功",
+      data: result
+    };
   }
   async update(ctx: Context) {
-    ctx.body = "创建成功";
+    // 1.获取用户传递过来的信息
+    const role = ctx.request.body;
+    const id = ctx.params.roleId;
+    // 3.将user的信息存入数据库
+    const result = await roleService.update(id, role);
+    ctx.body = {
+      message: "修改成功",
+      data: result
+    };
+  }
+  async findRoleById(ctx: Context) {
+    const { roleId } = ctx.params;
+    const result = (await roleService.findRoleById(Number(roleId))) as roleType[];
+    ctx.body = {
+      data: result[0]
+    };
+  }
+  async findRoleByName(ctx: Context) {
+    const role = ctx.request.body as roleType;
+    const result = (await roleService.findRoleByName(role.name)) as roleType[];
+    ctx.body = {
+      data: result[0]
+    };
   }
   async list(ctx: Context) {
     // 1.获取角色基本信息
@@ -43,9 +70,6 @@ class RoleController {
         totalCount: result.length
       }
     };
-  }
-  async detail(ctx: Context) {
-    ctx.body = "该接口开发中";
   }
   async assignMenu(ctx: Context) {
     // 1.获取参数

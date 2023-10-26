@@ -1,5 +1,6 @@
+import { menuType } from "./menu";
 export interface roleType {
-  menuList: import("e:/前端/nodeJS_up/10_项目实战-LyokoHub/LyokoHub/src/types/menu").menuType[];
+  menuList?: menuType[];
   id?: number;
   name?: string;
   type?: number;

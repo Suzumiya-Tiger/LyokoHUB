@@ -1,5 +1,6 @@
 import { Context } from "koa"; // 导入 Context 类型
 import menuService from "../service/menu.service";
+import { menuType } from "../types/menu";
 
 class MenuController {
   async create(ctx: Context) {
@@ -8,6 +9,17 @@ class MenuController {
     ctx.body = {
       code: 0,
       message: "创建菜单成功",
+      data: result
+    };
+  }
+  async update(ctx: Context) {
+    // 1.获取用户传递过来的信息
+    const role = ctx.request.body;
+    const id = ctx.params.menuId;
+    // 3.将user的信息存入数据库
+    const result = await menuService.update(id, role);
+    ctx.body = {
+      message: "修改成功",
       data: result
     };
   }
@@ -28,14 +40,14 @@ class MenuController {
       data: result
     };
   }
-  async userMenuList(ctx: Context) {
-    const result = await menuService.userMenu();
+  async getMenuInfo(ctx: Context) {
+    const { menuId } = ctx.params;
+    const result = (await menuService.findMenuById(Number(menuId))) as menuType[];
     ctx.body = {
-      code: 0,
-      message: "获取指定用户的菜单",
-      data: result
+      data: result[0]
     };
   }
+
 }
 const menuController = new MenuController();
 export { menuController };
