@@ -19,14 +19,20 @@ const verifyUser = async (ctx: Context, next: Next) => {
   }
 
   // 1.2判断用户名是否已存在
-  const isExistUserName = await userService.findUserByName(name);
-
-  if (Array.isArray(isExistUserName) && isExistUserName.length > 0) {
-    // 在这里处理已存在用户名的情况
-    return ctx.app.emit("error", NAME_IS_ALREADY_EXISTS, ctx);
+  const isExistUserName = (await userService.findUserByName(name)) as IUser[];
+  // 在这里处理除本名以外已存在相同用户名的情况
+  if (Array.isArray(isExistUserName)) {
+    if (isExistUserName.length > 1) {
+      return ctx.app.emit("error", NAME_IS_ALREADY_EXISTS, ctx);
+    } else if (isExistUserName.length) {
+      const userId = ctx.params.userId;
+      if (isExistUserName[0].id !== Number(userId)) {
+        return ctx.app.emit("error", NAME_IS_ALREADY_EXISTS, ctx);
+      }
+    }
+    //   只有上面的用户名登录逻辑验证通过，才能执行下一个中间件
+    await next();
   }
-  //   只有上面的用户名登录逻辑验证通过，才能执行下一个中间件
-  await next();
 };
 const handlePassword = async (ctx: Context, next: Next) => {
   // 1.取出密码

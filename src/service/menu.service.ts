@@ -38,12 +38,18 @@ class MenuService {
 	) FROM menu m2 WHERE m1.id = m2.parentId ORDER BY m2.sort) children
 FROM menu m1 
 WHERE m1.type = 1;`;
-    const [result] = await connection.query(statement);
+    const [result] = await connection.execute(statement);
+    console.log(result);
     return result;
   }
   async findMenuById(id: number) {
     const statement = "SELECT * FROM `menu` WHERE `id` = ?;";
     const [values] = await connection.execute(statement, [id]);
+    return values;
+  }
+  async findMenuByName(name: string) {
+    const statement = "SELECT * FROM `menu` WHERE `name` = ?;";
+    const [values] = await connection.execute(statement, [name]);
     return values;
   }
 }

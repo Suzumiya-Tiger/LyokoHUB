@@ -10,7 +10,10 @@ import {
   LABEL_IS_ALREADY_EXISTS,
   LABEL_IS_NOT_EXIST,
   ROLENAME_IS_ALREADY_EXISTS,
-  ROLENAME_IS_REQUIRED
+  ROLENAME_IS_REQUIRED,
+  SUEPER_USER_CAN_NOT_BE_DELETED,
+  NAME_IS_REQUIRED,
+  FORBIDDEN_DELETE
 } from "../config/error-constants";
 export function setupErrorHandlers() {
   // app.on的事件监听器是非常灵活的，可以在其他的中间件通过ctx.app.emit触发，
@@ -25,7 +28,7 @@ export function setupErrorHandlers() {
         break;
       case NAME_IS_ALREADY_EXISTS:
         code = -1002;
-        message = "用户名已存在,无法注册";
+        message = "该名称已存在,无法注册";
         break;
       case NAME_IS_NOT_EXISTS:
         code = -1003;
@@ -59,6 +62,19 @@ export function setupErrorHandlers() {
       case ROLENAME_IS_REQUIRED:
         code = -1011;
         message = "角色名不能为空";
+        break;
+
+      case SUEPER_USER_CAN_NOT_BE_DELETED:
+        code = -1012;
+        message = "超级管理员不能被删除";
+        break;
+      case NAME_IS_REQUIRED:
+        code = -1013;
+        message = "该名称不能为空";
+        break;
+      case FORBIDDEN_DELETE:
+        code = -1013;
+        message = "此项受保护，不可删除";
         break;
     }
     ctx.body = { code, message };

@@ -15,12 +15,23 @@ const verifyRole = async (ctx: Context, next: Next) => {
   }
 
   // 1.2判断角色名是否已存在
-  if (ctx.request.method !== "PATCH") {
-    const isExistUserName = await roleService.findRoleByName(name);
+  const isExistUserName = (await roleService.findRoleByName(name)) as roleType[];
 
-    if (Array.isArray(isExistUserName) && isExistUserName.length > 0) {
-      // 在这里处理已存在用户名的情况
+  // 在这里处理除本名以外已存在相同用户名的情况
+  if (Array.isArray(isExistUserName)) {
+    if (isExistUserName.length > 1) {
       return ctx.app.emit("error", ROLENAME_IS_ALREADY_EXISTS, ctx);
+    } else if (isExistUserName.length) {
+      if (ctx.request.method === "PATCH") {
+        const roleId = ctx.params.userId;
+        if (isExistUserName[0].id !== Number(roleId)) {
+          return ctx.app.emit("error", ROLENAME_IS_ALREADY_EXISTS, ctx);
+        }
+      } else {
+        return ctx.app.emit("error", ROLENAME_IS_ALREADY_EXISTS, ctx);
+      }
+      // 只有上面的逻辑验证通过，才能执行下一个中间件
+      await next();
     }
   }
   //   只有上面的用户名登录逻辑验证通过，才能执行下一个中间件

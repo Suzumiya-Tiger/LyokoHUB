@@ -5,6 +5,9 @@ import { fileService } from "../service/file.service";
 import { IUpload } from "../types/upload";
 import fs from "fs";
 import { UPLOAD_PATH } from "../config/path";
+
+import { SUEPER_USER_CAN_NOT_BE_DELETED } from "../config/error-constants";
+
 class UserController {
   async create(ctx: Context) {
     // 1.获取用户传递过来的信息
@@ -23,7 +26,7 @@ class UserController {
     const user = ctx.request.body as IUser;
     const id = ctx.params.userId;
     // 3.将user的信息存入数据库
-    const result = await userService.update(id,user);
+    const result = await userService.update(id, user);
     ctx.body = {
       message: "修改成功",
       data: result
@@ -32,6 +35,9 @@ class UserController {
   async delete(ctx: Context) {
     // 1.先获取用户的id
     const { userId } = ctx.params;
+    if (Number(userId) === 1) {
+      return ctx.app.emit("error", SUEPER_USER_CAN_NOT_BE_DELETED, ctx);
+    }
     const result = await userService.delete(Number(userId));
     ctx.body = {
       message: "删除成功",

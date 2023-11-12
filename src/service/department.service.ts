@@ -42,6 +42,11 @@ class DepartMentService {
     const [result] = await connection.query(statement, [department, departmentId]);
     return result;
   }
+  async findDepartmentByName(name: string) {
+    const statement = "SELECT * FROM `department` WHERE `name` = ?;";
+    const [values] = await connection.execute(statement, [name]);
+    return values;
+  }
 }
 const departmentService = new DepartMentService();
 export default departmentService;

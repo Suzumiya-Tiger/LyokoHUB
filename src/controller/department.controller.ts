@@ -34,6 +34,7 @@ class DepartmentController {
   }
   async getwholeDepartmentInfo(ctx: Context) {
     const result = (await departmentService.getwholeDepartmentInfo()) as departmentType[];
+
     ctx.body = {
       code: 0,
       message: "查询成功",

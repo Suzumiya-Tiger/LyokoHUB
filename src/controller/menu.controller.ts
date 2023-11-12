@@ -33,11 +33,13 @@ class MenuController {
     };
   }
   async list(ctx: Context) {
-    const result = await menuService.wholeMenu();
+    const result = (await menuService.wholeMenu()) as menuType[];
     ctx.body = {
       code: 0,
       message: "获取完整的菜单~",
-      data: result
+      data: {
+        list: result
+      }
     };
   }
   async getMenuInfo(ctx: Context) {
@@ -47,7 +49,6 @@ class MenuController {
       data: result[0]
     };
   }
-
 }
 const menuController = new MenuController();
 export { menuController };
