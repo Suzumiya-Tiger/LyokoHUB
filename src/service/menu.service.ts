@@ -39,7 +39,6 @@ class MenuService {
 FROM menu m1 
 WHERE m1.type = 1;`;
     const [result] = await connection.execute(statement);
-    console.log(result);
     return result;
   }
   async findMenuById(id: number) {

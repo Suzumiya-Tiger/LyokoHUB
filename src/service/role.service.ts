@@ -77,9 +77,26 @@ class RoleService {
     }
     return roleResult;
   }
-  async list(offset: number, size: number) {
-    const statement = `SELECT * FROM role LIMIT ?,?;`;
-    const [result] = await connection.query(statement, [offset, size]);
+  async list(roleInfo: roleType) {
+    let statement = "SELECT * FROM role WHERE 1=1";
+    const params = [];
+    let keys: keyof roleType;
+    for (keys in roleInfo) {
+      if (keys === "size" || keys === "offset") {
+        continue;
+      }
+      if (roleInfo[keys]) {
+        statement += ` AND ${keys} = ?`;
+        params.push(roleInfo[keys]);
+      }
+    }
+    statement += " LIMIT ?,?;";
+    const offset =
+      roleInfo.offset || roleInfo.offset === 0 ? String(roleInfo.offset) : "0";
+    const size = roleInfo.size || roleInfo.size === 0 ? String(roleInfo.size) : "10";
+    params.push(offset);
+    params.push(size);
+    const [result] = await connection.execute(statement, [...params]);
     return result;
   }
   async delete(id: number) {

@@ -24,6 +24,17 @@ class GoodsController {
       data: result
     };
   }
+  async batchAddAmount(ctx: Context) {
+    const goods = ctx.request.body;
+    const result = await goodsService.batchAddAmount(goods as goodsType[]);
+
+    // 3.返回结果
+    ctx.body = {
+      code: 0,
+      message: "批量创建商品数量成功",
+      data: result
+    };
+  }
   async delete(ctx: Context) {
     const goodsId = ctx.params.goodsId;
     const result = await goodsService.delete(goodsId);

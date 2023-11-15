@@ -12,7 +12,13 @@ class DepartMentService {
       const statement = `INSERT INTO goods SET ?;`;
       await connection.query(statement, [item]);
     }
-    console.log(goods);
+    return goods;
+  }
+  async batchAddAmount(goods: goodsType[]) {
+    for (const item of goods) {
+      const statement = `INSERT INTO goodsstatistic SET ?;`;
+      await connection.query(statement, [item]);
+    }
     return goods;
   }
   async delete(goodsId: number) {

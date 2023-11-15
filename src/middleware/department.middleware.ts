@@ -17,7 +17,6 @@ const verifyDepartment = async (ctx: Context, next: Next) => {
   const isExistUserName = (await departmentService.findDepartmentByName(
     name
   )) as departmentType[];
-  console.log(isExistUserName);
   // 在这里处理除本名以外已存在相同用户名的情况
   if (Array.isArray(isExistUserName)) {
     if (isExistUserName.length > 1) {

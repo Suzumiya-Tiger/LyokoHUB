@@ -57,13 +57,14 @@ class UserService {
     return values;
   }
   async getUserList(userInfo: IUser) {
+    console.log(userInfo);
     let statement =
       "SELECT name,id,realname,cellphone,role_id,departmentId,avatar_url,enable FROM `user` WHERE 1=1";
     const params = [];
     let keys: keyof IUser;
     for (keys in userInfo) {
       if (keys === "size" || keys === "offset") {
-        break;
+        continue;
       }
       if (userInfo[keys]) {
         statement += ` AND ${keys} = ?`;

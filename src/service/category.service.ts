@@ -12,7 +12,6 @@ class DepartMentService {
       const statement = `INSERT INTO category SET ?;`;
       await connection.query(statement, [item]);
     }
-    console.log(category);
     return category;
   }
   async delete(categoryId: number) {

@@ -5,7 +5,10 @@ import { categoryController } from "../controller/category.controller";
 const koaRouter = new KoaRouter({ prefix: "/goods" });
 
 koaRouter.post("/", verifyAuth, goodsController.create);
+// 批量添加商品或商品数量至对应表单
 koaRouter.post("/batchAdditions", verifyAuth, goodsController.batchAdditions);
+koaRouter.post("/batchAddAmount", verifyAuth, goodsController.batchAddAmount);
+
 koaRouter.delete("/:goodsId", verifyAuth, goodsController.delete);
 
 koaRouter.patch("/:goodsId", verifyAuth, goodsController.update);
