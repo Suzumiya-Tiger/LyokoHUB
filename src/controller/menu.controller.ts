@@ -1,6 +1,7 @@
 import { Context } from "koa"; // 导入 Context 类型
 import menuService from "../service/menu.service";
 import { menuType } from "../types/menu";
+import { NO_PERMISSION_TO_OPERATE } from "../config/error-constants";
 
 class MenuController {
   async create(ctx: Context) {
@@ -16,6 +17,9 @@ class MenuController {
     // 1.获取用户传递过来的信息
     const role = ctx.request.body;
     const id = ctx.params.menuId;
+    if (Number(id) <= 46) {
+      return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
+    }
     // 3.将user的信息存入数据库
     const result = await menuService.update(id, role);
     ctx.body = {
@@ -25,6 +29,9 @@ class MenuController {
   }
   async delete(ctx: Context) {
     const menuId = ctx.params.menuId;
+    if (Number(menuId) <= 46) {
+      return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
+    }
     const result = await menuService.delete(menuId);
     ctx.body = {
       code: 0,

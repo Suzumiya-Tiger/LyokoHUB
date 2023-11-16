@@ -117,12 +117,8 @@ class RoleService {
   // 为人员赋予角色权限
   async assignUser(roleId: number, userId: number) {
     // 1.先删除之前的关系
-    const deleteStatement = `DELETE FROM role_user WHERE userId=?;`;
-    await connection.execute(deleteStatement, [roleId]);
-    const updateRoleUserStatement = `
-    INSERT INTO
-    role_user (roleId,userId) VALUES (?,?);`;
-    await connection.execute(updateRoleUserStatement, [roleId, userId]);
+    const updateRoleStatement = `UPDATE role SET user_id = ? WHERE id = ?;`;
+    await connection.execute(updateRoleStatement, [userId, roleId]);
 
     const updateUserStatement = `UPDATE
     user SET role_id = ?

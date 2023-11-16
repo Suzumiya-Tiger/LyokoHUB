@@ -12,9 +12,9 @@ class UserController {
   async create(ctx: Context) {
     // 1.获取用户传递过来的信息
     const user = ctx.request.body as IUser;
-    user.enable = true;
     // 3.将user的信息存入数据库
-    const result = await userService.create(user);
+    await userService.create(user);
+    const result = await userService.createRoleUser(user);
     // 4.查看存储的结果，需要返回创建信息给前端
     ctx.body = {
       message: "创建成功",
@@ -22,7 +22,11 @@ class UserController {
     };
   }
   async update(ctx: Context) {
+    const { userId } = ctx.params;
     // 1.获取用户传递过来的信息
+    if (Number(userId) === 1) {
+      return ctx.app.emit("error", SUEPER_USER_CAN_NOT_BE_DELETED, ctx);
+    }
     const user = ctx.request.body as IUser;
     const id = ctx.params.userId;
     // 3.将user的信息存入数据库

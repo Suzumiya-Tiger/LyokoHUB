@@ -18,10 +18,19 @@ import type { IUser } from "../types/user";
 class UserService {
   // 将user对象保存到数据库之中;
   async create(user: IUser) {
+    /*      */
     const statement = `INSERT INTO user SET ?;`;
-    const [result] = await connection.query(statement, [user]);
-
-    return result;
+    try {
+      const [result] = await connection.query(statement, [user]);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async createRoleUser(user: IUser) {
+    const userInfo = (await this.findUserByName(user.name)) as IUser;
+    const roleUserStatement = `INSERT INTO user (roleId,userId) VALUES(?,?);`;
+    await connection.execute(roleUserStatement, [user.role_id, userInfo.id]);
   }
   async update(id: number, user: IUser) {
     // UPDATE 语句的作用是在已存在的行中修改列的值，因此它不支持直接将一个对象映射到列。

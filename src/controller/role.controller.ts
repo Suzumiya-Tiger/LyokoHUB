@@ -3,6 +3,7 @@ import { roleService } from "../service/role.service";
 import { menuType } from "../types/menu";
 import { roleType } from "../types/role";
 import { roleMenuType } from "../types/roleMenu";
+import { NO_PERMISSION_TO_OPERATE } from "../config/error-constants";
 class RoleController {
   async create(ctx: Context) {
     //   1.获取角色对象信息
@@ -19,6 +20,9 @@ class RoleController {
   }
   async remove(ctx: Context) {
     const { roleId } = ctx.params;
+    if ([1, 2, 28].includes(Number(roleId))) {
+      return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
+    }
     const result = await roleService.delete(Number(roleId));
     ctx.body = {
       message: "删除成功",
@@ -31,6 +35,9 @@ class RoleController {
     const id = ctx.params.roleId;
     // 3.将user的信息存入数据库
     const result = await roleService.update(id, role);
+    if ([1, 2, 28].includes(Number(id))) {
+      return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
+    }
     ctx.body = {
       message: "修改成功",
       data: result

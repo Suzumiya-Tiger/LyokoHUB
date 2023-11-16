@@ -1,6 +1,7 @@
 import { Context } from "koa"; // 导入 Context 类型
 import departmentService from "../service/department.service";
 import { departmentType } from "../types/department";
+import { NO_PERMISSION_TO_OPERATE } from "../config/error-constants";
 class DepartmentController {
   async create(ctx: Context) {
     const department = ctx.request.body;
@@ -15,6 +16,9 @@ class DepartmentController {
   }
   async delete(ctx: Context) {
     const departmentId = ctx.params.departmentId;
+    if (Number(departmentId) <= 2) {
+      return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
+    }
     const result = await departmentService.delete(departmentId);
     ctx.body = {
       code: 0,
@@ -24,6 +28,9 @@ class DepartmentController {
   }
   async update(ctx: Context) {
     const departmentId = ctx.params.departmentId;
+    if (Number(departmentId) <= 2) {
+      return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
+    }
     const department = ctx.request.body as departmentType;
     const result = await departmentService.updateDepartment(department, departmentId);
     ctx.body = {

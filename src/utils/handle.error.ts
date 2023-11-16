@@ -13,7 +13,8 @@ import {
   ROLENAME_IS_REQUIRED,
   SUEPER_USER_CAN_NOT_BE_DELETED,
   NAME_IS_REQUIRED,
-  FORBIDDEN_DELETE
+  FORBIDDEN_DELETE,
+  NO_PERMISSION_TO_OPERATE
 } from "../config/error-constants";
 export function setupErrorHandlers() {
   // app.on的事件监听器是非常灵活的，可以在其他的中间件通过ctx.app.emit触发，
@@ -75,6 +76,10 @@ export function setupErrorHandlers() {
       case FORBIDDEN_DELETE:
         code = -1013;
         message = "此项受保护，不可删除";
+        break;
+      case NO_PERMISSION_TO_OPERATE:
+        code = -1014;
+        message = "非管理员用户不可进行此项受保护数据的操作";
         break;
     }
     ctx.body = { code, message };
