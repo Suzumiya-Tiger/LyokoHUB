@@ -65,7 +65,7 @@ class RoleController {
       for (const role of result) {
         const { id } = role;
         const menu = await roleService.getRoleMenu(id);
-        role.menuList = menu;
+        role.menuList = menu ?? [];
       }
     }
     ctx.body = {

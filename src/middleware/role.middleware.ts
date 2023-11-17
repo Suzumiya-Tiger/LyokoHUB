@@ -23,15 +23,13 @@ const verifyRole = async (ctx: Context, next: Next) => {
       return ctx.app.emit("error", ROLENAME_IS_ALREADY_EXISTS, ctx);
     } else if (isExistUserName.length) {
       if (ctx.request.method === "PATCH") {
-        const roleId = ctx.params.userId;
+        const roleId = ctx.params.roleId;
         if (isExistUserName[0].id !== Number(roleId)) {
           return ctx.app.emit("error", ROLENAME_IS_ALREADY_EXISTS, ctx);
         }
       } else {
         return ctx.app.emit("error", ROLENAME_IS_ALREADY_EXISTS, ctx);
       }
-      // 只有上面的逻辑验证通过，才能执行下一个中间件
-      await next();
     }
   }
   //   只有上面的用户名登录逻辑验证通过，才能执行下一个中间件

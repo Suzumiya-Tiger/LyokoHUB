@@ -20,6 +20,7 @@ const connectionPool = mysql.createPool({
 connectionPool.getConnection((err, connection) => {
   // 判断错误信息
   if (err) {
+    console.log(err);
     console.log("连接失败");
   } else {
     // 如果没有错误信息，说明连接成功

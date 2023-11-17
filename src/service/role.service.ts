@@ -32,7 +32,9 @@ class RoleService {
     // 为role_menu添加数据
     if (Array.isArray(searchSesult) && searchSesult.length) {
       const role_id = searchSesult[0].id;
-      await this.insetRoleMenu(role_id, role.menuList as Array<number>);
+      if (role.menuList && role.menuList.length) {
+        await this.insetRoleMenu(role_id, role.menuList as Array<number>);
+      }
       return createResult;
     }
   }
