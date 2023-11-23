@@ -3,3 +3,4 @@ src/config/keys
 uploads
 deploy-server.md
 .env
+deploy-server.assets

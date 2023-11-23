@@ -2,6 +2,57 @@
 
 ## **本项目结合 ESModule 和 TypeScript 实现一个基于 NodeJS 开发的平台**
 
+**注意！linux和mac用户需选取mac/linux分支，或者在main分支下进行以下配置的修改方可正常使用：**
+
+```shell
+pnpm install ts-node -D
+```
+
+**package.json**
+
+```json
+   "dev": "nodemon --watch /src/**/* --delay 500ms -e ts --exec npm start",
+    "start": "node --loader ts-node/esm -r esbuild-register src/main.ts",
+```
+
+**/src/router/index.ts**
+
+```typescript
+    const router = routerModule.default.default; // 获取默认导出
+```
+
+### 必须配置项：
+
+**服务器和mysql数据库配置**
+
+请在本地创建.env文件，自主配置相关服务器和mysql配置，示例文件内容如下：
+
+```
+SERVER_HOST=您的服务器HOST，本地可配置为 http://localhost
+SERVER_PORT=您的服务器接口
+MYSQL_HOST=您的数据库HOST，本地可配置为 localhost
+MYSQL_PORT=您的数据库接口
+MYSQL_DATABASE= 您的数据库名称
+MYSQL_USER= 您的数据库用户名称
+MYSQL_PASSWORD=您的数据库密码
+```
+
+**使用公钥和私钥签发和验证签名**
+
+在config文件夹下建立keys文件夹
+
+基于openssl生成公钥和私钥：
+
+```shell
+openssl
+> genrsa -out private.key 1024
+> rsa -in private.key -pubout -out public.key
+```
+
+将生成的公钥和私钥添加进对应文件夹即可
+
+![image-20231123182125095](./readme.assets/image-20231123182125095.png)
+
 ### 本项目引用插件：
 
 husky+commitizen
