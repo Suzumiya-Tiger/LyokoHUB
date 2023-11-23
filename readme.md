@@ -45,7 +45,7 @@ MYSQL_PASSWORD=您的数据库密码
 
 ```shell
 openssl
-> genrsa -out private.key 1024
+> genrsa -out private.key 2048
 > rsa -in private.key -pubout -out public.key
 ```
 
