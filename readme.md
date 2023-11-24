@@ -167,6 +167,6 @@ pnpm install koa-router --save
 
 ```javascript
 "dev": "nodemon --watch src/**/* --delay 1500ms -e ts --exec npm start",
-"start": "ts-node --esm -r esbuild-register src/main.ts",
+"start": "ts-node --esm -r esbuild-register src/main.ts"
 ```
 
