@@ -119,7 +119,7 @@ pnpm install koa-router --save
 |-- config
 | |-- server.ts
 |-- router
-|-- user.router.ts
+|-- user.router.ts 
 
 ## src目录中的主要业务组件的构建逻辑
 
