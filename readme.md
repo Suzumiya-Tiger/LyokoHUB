@@ -163,7 +163,7 @@ pnpm install koa-router --save
 
 ### 对typeScript的支持
 
-在package.json中使用ts-node来加载该项目下的typeScript文件
+在package.json中使用ts-node来加载该项目下的typeScript文件 
 
 ```javascript
 "dev": "nodemon --watch src/**/* --delay 1500ms -e ts --exec npm start",
