@@ -125,7 +125,7 @@ pnpm install koa-router --save
 
 ### router
 
-注册KoaRouter，构建Koa的路由组件并且写入各个中间件，确保路由组件的执行顺序。
+注册KoaRouter，构建Koa的路由组件并且写入各个中间件，确保路由组件的执行顺序。 
 
 ### controller
 
