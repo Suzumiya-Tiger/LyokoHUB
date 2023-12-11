@@ -119,13 +119,13 @@ pnpm install koa-router --save
 |-- config
 | |-- server.ts
 |-- router
-|-- user.router.ts
+|-- user.router.ts 
 
 ## src目录中的主要业务组件的构建逻辑
 
 ### router
 
-注册KoaRouter，构建Koa的路由组件并且写入各个中间件，确保路由组件的执行顺序。
+注册KoaRouter，构建Koa的路由组件并且写入各个中间件，确保路由组件的执行顺序。 
 
 ### controller
 
@@ -163,10 +163,10 @@ pnpm install koa-router --save
 
 ### 对typeScript的支持
 
-在package.json中使用ts-node来加载该项目下的typeScript文件
+在package.json中使用ts-node来加载该项目下的typeScript文件 
 
 ```javascript
 "dev": "nodemon --watch src/**/* --delay 1500ms -e ts --exec npm start",
-"start": "ts-node --esm -r esbuild-register src/main.ts",
+"start": "ts-node --esm -r esbuild-register src/main.ts"
 ```
 
