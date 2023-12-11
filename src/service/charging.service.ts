@@ -30,7 +30,7 @@ class ChargingService {
     return result;
   }
   async getwholeChargingInfo(path: string) {
-    if (path === "charging_stationTop4") {
+    if (path === "charging_stationtop4") {
       const statement = `SELECT
   (SELECT SUM(percentage) FROM (SELECT * FROM charging_stationtop4 ORDER BY id LIMIT 4) AS top4) AS totalPercentage,
   JSON_ARRAYAGG(JSON_OBJECT('id', t.id, 'city_name', t.city_name, 'percentage', t.percentage)) AS data
