@@ -2,7 +2,7 @@ import KoaRouter from "koa-router";
 import { verifyAuth } from "../middleware/login.middleware";
 import { chargingController } from "../controller/charging.controller";
 const koaRouter = new KoaRouter({ prefix: "/charging" });
-const chargingType = ["piles", "stationTop4", "dataAnalysis", "exceptionMonitoring"];
+const chargingType = ["piles", "stationtop4", "dataanalysis", "exceptionmonitoring"];
 for (let i = 0; i < chargingType.length; i++) {
   // 创建
   koaRouter.post(`/${chargingType[i]}`, verifyAuth, chargingController.create);
@@ -44,13 +44,13 @@ for (let i = 0; i < chargingType.length; i++) {
 }
 /* 更新流程监控数据 */
 koaRouter.post(
-  "/processMonitoring/batchAdditions",
+  "/processmonitoring/batchAdditions",
   verifyAuth,
   chargingController.batchMonitorAdditions
 );
-koaRouter.patch("/processMonitoring", verifyAuth, chargingController.monitorUpdate);
-koaRouter.get("/processMonitoring", chargingController.getMonitorInfo);
-koaRouter.post("/processMonitoring/list", chargingController.getwholeMonitorInfo);
+koaRouter.patch("/processmonitoring", verifyAuth, chargingController.monitorUpdate);
+koaRouter.get("/processmonitoring", chargingController.getMonitorInfo);
+koaRouter.post("/processmonitoring/list", chargingController.getwholeMonitorInfo);
 
 /* 充电数据统计 */
 koaRouter.post(
