@@ -81,7 +81,7 @@ FROM charging_stationtop4 t;`;
   }
   async getwholeMonitorInfo() {
     const statement =
-      "SELECT `name`, GROUP_CONCAT(value ORDER BY month) as data FROM charging_processMonitoring GROUP BY `name`;";
+      "SELECT `name`, GROUP_CONCAT(value ORDER BY month) as data FROM charging_processmonitoring GROUP BY `name`;";
     const [res] = await connection.query(statement, []);
     if (Array.isArray(res)) {
       const result = res.map(item => {
