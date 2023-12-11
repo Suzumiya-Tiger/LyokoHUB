@@ -6,7 +6,10 @@ import { IUpload } from "../types/upload";
 import fs from "fs";
 import { UPLOAD_PATH } from "../config/path";
 
-import { SUEPER_USER_CAN_NOT_BE_DELETED } from "../config/error-constants";
+import {
+  NO_PERMISSION_TO_OPERATE,
+  SUEPER_USER_CAN_NOT_BE_DELETED
+} from "../config/error-constants";
 
 class UserController {
   async create(ctx: Context) {
@@ -25,7 +28,7 @@ class UserController {
     const { userId } = ctx.params;
     // 1.获取用户传递过来的信息
     if (Number(userId) === 1) {
-      return ctx.app.emit("error", SUEPER_USER_CAN_NOT_BE_DELETED, ctx);
+      return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
     }
     const user = ctx.request.body as IUser;
     const id = ctx.params.userId;

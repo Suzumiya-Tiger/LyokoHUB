@@ -74,11 +74,11 @@ export function setupErrorHandlers() {
         message = "该名称不能为空";
         break;
       case FORBIDDEN_DELETE:
-        code = -1013;
+        code = -1014;
         message = "此项受保护，不可删除";
         break;
       case NO_PERMISSION_TO_OPERATE:
-        code = -1014;
+        code = -1015;
         message = "非管理员用户不可进行此项受保护数据的操作";
         break;
     }
