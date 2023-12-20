@@ -2,5 +2,6 @@ node_modules
 src/config/keys
 uploads
 deploy-server.md
+database.md
 .env
 deploy-server.assets
