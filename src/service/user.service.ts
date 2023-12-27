@@ -66,7 +66,6 @@ class UserService {
     return values;
   }
   async getUserList(userInfo: IUser) {
-    console.log(userInfo);
     let statement =
       "SELECT name,id,realname,cellphone,role_id,departmentId,avatar_url,enable FROM `user` WHERE 1=1";
     const params = [];

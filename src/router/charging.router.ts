@@ -62,5 +62,4 @@ koaRouter.patch("/statistics", verifyAuth, chargingController.statisticsUpdate);
 koaRouter.get("/statistics/:id", chargingController.getStatisticsInfo);
 koaRouter.post("/statistics/list", chargingController.getwholeStatisticsInfo);
 
-
 export default koaRouter;

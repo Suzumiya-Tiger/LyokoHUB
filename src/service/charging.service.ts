@@ -1,8 +1,6 @@
 import { connection } from "../app/database";
 import { pilesType } from "../types/chargingPiles";
-import {
-  processMonitoringType
-} from "../types/chargingProcessMonitoring";
+import { processMonitoringType } from "../types/chargingProcessMonitoring";
 import { StatisticsType } from "../types/chargingStatistics";
 
 /* interface IterablechargingType {
