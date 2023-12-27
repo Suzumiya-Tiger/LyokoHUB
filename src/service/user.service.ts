@@ -67,7 +67,7 @@ class UserService {
   }
   async getUserList(userInfo: IUser) {
     let statement =
-      "SELECT name,id,realname,cellphone,role_id,departmentId,avatar_url,enable FROM `user` WHERE 1=1";
+      "SELECT name,id,realname,cellphone,role_id,departmentId,avatar_url,enable,createAt,updateAt FROM `user` WHERE 1=1";
     const params = [];
     let keys: keyof IUser;
     for (keys in userInfo) {
