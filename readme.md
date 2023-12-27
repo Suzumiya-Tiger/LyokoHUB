@@ -6,6 +6,38 @@
 
 本项目接口文档:https://documenter.getpostman.com/view/20140339/2s9Ykt6KK5
 
+## **重大提示**
+
+如果您使用的Node版本是V18.6.0以下，您可以直接使用主分支master的代码。
+
+但是如果您使用最新的Node版本特别是NodeV20.0以上的版本，请务必拉取NodeV20.0分支的代码。
+
+目前最新的Node版本对ts-node的支持存在重大问题，搜遍全网都没有办法解决执行ts-node运行ts文件的坑，详情请看https://github.com/TypeStrong/ts-node/issues/2094，这个issue 从8月开到现在一直都没解决。
+
+如果您有有效的解决方案，恳请您为我提个issue予以解决，感激不尽！
+
+### Node V18.6及以下
+
+采用master分支的代码
+
+主要变化是在package.json中使用ts-node来加载该项目下的typeScript文件 
+
+```javascript
+    "dev": "nodemon --watch /src/**/* --delay 500ms -e ts --exec npm start",
+    "start": "ts-node --esm -r esbuild-register src/main.ts",
+```
+
+### Node V20.0及以上
+
+主要变化是基于NodeV20.0及以上版本在package.json中使用ts-node来加载该项目下的typeScript文件 
+
+```json
+    "dev": "nodemon --watch /src/**/* --delay 500ms -e ts --exec npm start",
+    "start": "node --loader ts-node/esm -r esbuild-register src/main.ts",
+```
+
+
+
 ## 目录结构
 
 |-- LyokoHub
@@ -510,61 +542,3 @@ export function setupArrayErrorHandlers() {
 随后我们通过在发射事件中一同发射过来的`ctx`，通过 `ctx.body`返回错误相应数据给客户端，即可完成完成错误处理。
 
 注意理解一下Koa中 `ctx`所发挥的巨大作用，`ctx`是渗透到全局的基于koa中间件所建立的上下文对象，只要是调用了KoaRouter的methods请求的第二个参数及后续参数，都是一个携带ctx和next的中间件，我们可以巧妙地借用这些中间件回调来完成 `ctx`的传递。
-
-### 不同运行环境的区别
-
-在package.json中使用ts-node来加载该项目下的typeScript文件 
-
-```javascript
-    "dev": "nodemon --watch /src/**/* --delay 500ms -e ts --exec ts-node start.ts"
-```
-
-本项目对WIN平台和其他平台进行了Node执行命令上的区分，因为在WIN和其它平台(比如Mac系统或者Linux)在利用ts-node上有所区别，所以本项目采取了不同的执行脚本策略。
-
-**package.json**
-
-```json
-    "dev": "nodemon --watch /src/**/* --delay 500ms -e ts --exec ts-node start.ts",
-```
-
-**start.ts**
-
-```typescript
-import { spawn } from "child_process";
-
-let child;
-
-if (process.platform === "win32") {
-  // Windows 系统
-  /**
-   * 由于 Node.js 的 spawn 函数在 Windows 系统上的行为。
-   * 在 Windows 系统上，spawn 函数不能直接运行 .cmd 文件，而 ts-node 实际上是一个 .cmd 文件。
-   * 通过将 ts-node 改为 ts-node.cmd 来解决ts-node直接执行失败的问题。
-   * 如果换用node来执行，还需要将 node 改为 node.exe，因为 node 在 Windows 系统上也是一个 .cmd 文件。
-   */
-  child = spawn("ts-node.cmd", ["--esm", "-r", "esbuild-register", "src/main.ts"]);
-} else {
-  // 其他系统
-  child = spawn("node", [
-    "--loader",
-    "ts-node/esm",
-    "-r",
-    "esbuild-register",
-    "src/main.ts"
-  ]);
-}
-
-child.stdout.on("data", data => {
-  console.log(`stdout: ${data}`);
-});
-
-child.stderr.on("data", data => {
-  console.error(`stderr: ${data}`);
-});
-
-child.on("close", code => {
-  console.log(`child process exited with code ${code}`);
-});
-
-```
-

@@ -2,11 +2,12 @@
   "name": "LyokoHub",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch /src/**/* --delay 500ms -e ts --exec ts-node start.ts",
+    "dev": "nodemon --watch /src/**/* --delay 500ms -e ts --exec npm start",
+    "start": "ts-node --esm -r esbuild-register src/main.ts",
     "prepare": "husky install"
   },
   "keywords": [],
