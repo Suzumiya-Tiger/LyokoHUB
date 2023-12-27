@@ -160,8 +160,7 @@ class RoleService {
         const newMenu = [];
         for (const item of menu) {
           if (item.children) {
-            // 看清楚，每次递归调用的时候，都是新建一个newMenu数组，然后将符合条件的item push进去
-            // 所以最终得到的newMenu数组，就是符合条件的item的集合，和原本的menu数组结构一模一样
+            // 最终得到的newMenu数组，就是符合条件的item的集合，和原本的menu数组结构一模一样
             item.children = filtermenu(item.children);
           }
           if (menuIds.includes(item.id)) {

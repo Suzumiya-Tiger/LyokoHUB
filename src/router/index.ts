@@ -36,7 +36,14 @@ async function registerRouters(app: App) {
      * TypeScript 会自动将 router 推断为 Router 类型，
      * 因为 routerModule.default 是一个默认导出的 Koa 路由对象。
      */
-    const router = routerModule.default; // 获取默认导出
+    let router = null;
+    if (process.platform === "win32") {
+      // 在Windows系统上执行的代码
+      router = routerModule.default; // 获取默认导出
+    } else {
+      // 在其他系统上执行的代码
+      router = routerModule.default.default; // 获取默认导出
+    }
     app.use(router.routes());
     app.use(router.allowedMethods());
   }
