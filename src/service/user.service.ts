@@ -18,19 +18,14 @@ import type { IUser } from "../types/user";
 class UserService {
   // 将user对象保存到数据库之中;
   async create(user: IUser) {
-    /*      */
     const statement = `INSERT INTO user SET ?;`;
-    try {
-      const [result] = await connection.query(statement, [user]);
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
+    const [result] = await connection.query(statement, [user]);
+    return result;
   }
   async createRoleUser(user: IUser) {
-    const userInfo = (await this.findUserByName(user.name)) as IUser;
-    const roleUserStatement = `INSERT INTO user (roleId,userId) VALUES(?,?);`;
-    await connection.execute(roleUserStatement, [user.role_id, userInfo.id]);
+    const userInfo = (await this.findUserByName(user.name)) as IUser[];
+    const roleUserStatement = `INSERT INTO role_user (roleId,userId) VALUES(?,?);`;
+    await connection.execute(roleUserStatement, [user.role_id, userInfo[0].id]);
   }
   async update(id: number, user: IUser) {
     // UPDATE 语句的作用是在已存在的行中修改列的值，因此它不支持直接将一个对象映射到列。
@@ -60,14 +55,13 @@ class UserService {
   }
   // 根据用户id查询用户的信息
   async findUserById(id: number) {
-    const statement =
-      "SELECT name,id,createAt,updateAt,role_id FROM `user` WHERE `id` = ?;";
+    const statement = "SELECT name,id,createAt,updateAt FROM `user` WHERE `id` = ?;";
     const [values] = await connection.execute(statement, [id]);
     return values;
   }
-  async getUserList(userInfo: IUser) {
+  async getUserList(userInfo?: IUser) {
     let statement =
-      "SELECT name,id,realname,cellphone,role_id,departmentId,avatar_url,enable,createAt,updateAt FROM `user` WHERE 1=1";
+      "SELECT name,id,realname,cellphone,departmentId,avatar_url,enable,createAt,updateAt FROM `user` WHERE 1=1";
     const params = [];
     let keys: keyof IUser;
     for (keys in userInfo) {
@@ -85,7 +79,13 @@ class UserService {
     const size = userInfo.size || userInfo.size === 0 ? String(userInfo.size) : "10";
     params.push(offset);
     params.push(size);
+
     const [result] = await connection.execute(statement, [...params]);
+    return result;
+  }
+  async getUserTotalCount() {
+    const statement = "SELECT COUNT(*) as totalCount FROM `user`";
+    const [result] = await connection.execute(statement, []);
     return result;
   }
   async updateUserAvatar(avatarUrl: string, userId: number) {

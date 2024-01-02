@@ -6,8 +6,8 @@ const menuRouter = new KoaRouter({ prefix: "/menu" });
 
 // 新增菜单/菜单列表
 menuRouter.post("/", verifyAuth, menuController.create);
-menuRouter.patch("/:menuId", verifyAuth, menuController.update);
-menuRouter.delete("/:menuId", verifyAuth, verifyMenu, menuController.delete);
+menuRouter.patch("/:menuId", verifyAuth, verifyMenu, menuController.update);
+menuRouter.delete("/:menuId", verifyAuth, menuController.delete);
 
 // 查询整个菜单
 menuRouter.post("/list", verifyAuth, menuController.list);
