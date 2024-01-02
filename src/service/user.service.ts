@@ -55,13 +55,14 @@ class UserService {
   }
   // 根据用户id查询用户的信息
   async findUserById(id: number) {
-    const statement = "SELECT name,id,createAt,updateAt FROM `user` WHERE `id` = ?;";
+    const statement =
+      "SELECT name,id,role_id,createAt,updateAt FROM `user` WHERE `id` = ?;";
     const [values] = await connection.execute(statement, [id]);
     return values;
   }
   async getUserList(userInfo?: IUser) {
     let statement =
-      "SELECT name,id,realname,cellphone,departmentId,avatar_url,enable,createAt,updateAt FROM `user` WHERE 1=1";
+      "SELECT role_id,name,id,realname,cellphone,departmentId,avatar_url,enable,createAt,updateAt FROM `user` WHERE 1=1";
     const params = [];
     let keys: keyof IUser;
     for (keys in userInfo) {
