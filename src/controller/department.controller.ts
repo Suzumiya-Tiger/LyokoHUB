@@ -2,6 +2,9 @@ import { Context } from "koa"; // 导入 Context 类型
 import departmentService from "../service/department.service";
 import { departmentType } from "../types/department";
 import { NO_PERMISSION_TO_OPERATE } from "../config/error-constants";
+
+import type { totalType } from "../types/totalList";
+
 class DepartmentController {
   async create(ctx: Context) {
     const department = ctx.request.body;
@@ -41,13 +44,14 @@ class DepartmentController {
   }
   async getwholeDepartmentInfo(ctx: Context) {
     const result = (await departmentService.getwholeDepartmentInfo()) as departmentType[];
+    const [total] = (await departmentService.getMenuTotalCount()) as totalType[];
 
     ctx.body = {
       code: 0,
       message: "查询成功",
       data: {
         list: result,
-        totalCount: result.length
+        totalCount: total.totalCount
       }
     };
   }

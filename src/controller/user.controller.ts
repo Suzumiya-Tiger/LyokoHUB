@@ -1,6 +1,7 @@
 import { Context } from "koa"; // 导入 Context 类型
 import { userService } from "../service/user.service";
 import type { IUser } from "../types/user";
+import type { totalType } from "../types/totalList";
 import { fileService } from "../service/file.service";
 import { IUpload } from "../types/upload";
 import fs from "fs";
@@ -13,16 +14,23 @@ import {
 
 class UserController {
   async create(ctx: Context) {
-    // 1.获取用户传递过来的信息
-    const user = ctx.request.body as IUser;
-    // 3.将user的信息存入数据库
-    await userService.create(user);
-    const result = await userService.createRoleUser(user);
-    // 4.查看存储的结果，需要返回创建信息给前端
-    ctx.body = {
-      message: "创建成功",
-      data: result
-    };
+    try {
+      // 1.获取用户传递过来的信息
+      const user = ctx.request.body as IUser;
+      if (ctx.user.id !== 1 && (user.role_id === 1 || user.role_id === 2)) {
+        return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
+      }
+      // 3.将user的信息存入数据库
+      await userService.create(user);
+      const result = await userService.createRoleUser(user);
+      // 4.查看存储的结果，需要返回创建信息给前端
+      ctx.body = {
+        message: "创建成功",
+        data: result
+      };
+    } catch (error) {
+      console.log(error);
+    }
   }
   async update(ctx: Context) {
     const { userId } = ctx.params;
@@ -62,10 +70,11 @@ class UserController {
   async getUserList(ctx: Context) {
     const requestInfo = ctx.request.body as IUser;
     const result = (await userService.getUserList(requestInfo)) as IUser[];
+    const [total] = (await userService.getUserTotalCount()) as totalType[];
     ctx.body = {
       data: {
         list: result,
-        totalCount: result.length
+        totalCount: total.totalCount
       },
       message: "查询成功"
     };

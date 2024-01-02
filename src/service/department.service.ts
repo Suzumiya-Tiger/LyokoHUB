@@ -37,6 +37,11 @@ class DepartMentService {
     const [result] = await connection.query(statement);
     return result;
   }
+  async getMenuTotalCount() {
+    const statement = `SELECT COUNT(*) totalCount FROM department;`;
+    const [result] = await connection.execute(statement);
+    return result;
+  }
   async updateDepartment(department: departmentType, departmentId: number) {
     const statement = `UPDATE department SET ? WHERE id = ?;`;
     const [result] = await connection.query(statement, [department, departmentId]);

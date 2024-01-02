@@ -4,6 +4,9 @@ import { menuType } from "../types/menu";
 import { roleType } from "../types/role";
 import { roleMenuType } from "../types/roleMenu";
 import { NO_PERMISSION_TO_OPERATE } from "../config/error-constants";
+
+import type { totalType } from "../types/totalList";
+
 class RoleController {
   async create(ctx: Context) {
     //   1.获取角色对象信息
@@ -68,12 +71,13 @@ class RoleController {
         role.menuList = menu ?? [];
       }
     }
+    const [total] = (await roleService.getRoleTotalCount()) as totalType[];
     ctx.body = {
       code: 0,
       message: "获取角色列表",
       data: {
         list: result,
-        totalCount: result.length
+        totalCount: total.totalCount
       }
     };
   }

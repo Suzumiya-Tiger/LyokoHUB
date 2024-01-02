@@ -13,6 +13,7 @@ const SUEPER_USER_CAN_NOT_BE_DELETED = "sueper_user_can_not_be_deleted";
 const FORBIDDEN_DELETE = "forbidden_delete";
 const NAME_IS_REQUIRED = "name_is_required";
 const NO_PERMISSION_TO_OPERATE = "no_permission_to_operate";
+const MENU_IS_EXIST = "role_menu_is_exist";
 export {
   FORBIDDEN_DELETE,
   NAME_IS_REQUIRED,
@@ -28,5 +29,6 @@ export {
   ROLENAME_IS_ALREADY_EXISTS,
   ROLENAME_IS_REQUIRED,
   SUEPER_USER_CAN_NOT_BE_DELETED,
-  NO_PERMISSION_TO_OPERATE
+  NO_PERMISSION_TO_OPERATE,
+  MENU_IS_EXIST
 };

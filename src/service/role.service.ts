@@ -3,6 +3,7 @@ import { roleType } from "../types/role";
 import type { roleMenuType } from "../types/roleMenu";
 import menuService from "./menu.service";
 import { menuType } from "../types/menu";
+
 /* 使用connection.query时，传入的参数必须是Number类型，使用execute则传入字符串类型 */
 class RoleService {
   private replaceLastCommaWithSemicolon(str: string) {
@@ -111,6 +112,11 @@ class RoleService {
     const [values] = await connection.execute(statement, [id]);
     return values;
   }
+  async findRoleByUserId(userId: number) {
+    const statement = "SELECT roleId FROM `role_user` WHERE `userId` = ?;";
+    const [values] = await connection.execute(statement, [userId]);
+    return values;
+  }
   async findRoleByName(name: string) {
     const statement = "SELECT * FROM `role` WHERE `name` = ?;";
     const [values] = await connection.execute(statement, [name]);
@@ -129,6 +135,7 @@ class RoleService {
 
     return result;
   }
+  // 为角色赋予多个菜单权限
   async assignMenu(roleId: number, menuIds: Array<number>) {
     // 1.先删除之前的关系
     const deleteStatement = `DELETE FROM role_menu WHERE roleId=?;`;
@@ -140,7 +147,21 @@ class RoleService {
       await connection.query(insertStatement, [roleId, menuId]);
     }
   }
-
+  async deleteSingleMenu(roleId: number) {
+    // 删除之前的关系
+    const deleteStatement = `DELETE FROM role_menu WHERE menuId=?;`;
+    await connection.execute(deleteStatement, [roleId]);
+  }
+  // 更新该角色的菜单权限
+  async updateMenu(roleId: number, menuId: number) {
+    const allMenu = await this.getRoleMenu(roleId);
+    const isExist = allMenu.find((item: menuType) => item.id === menuId);
+    if (isExist) {
+      return { error: -100, message: "该角色已经拥有该菜单权限" };
+    }
+    const insertStatement = `INSERT INTO role_menu (roleId,menuId) VALUES (?,?);`;
+    await connection.query(insertStatement, [roleId, menuId]);
+  }
   async getRoleMenu(roleId: number) {
     // 1.根据roleId获取所有的menuId
     const getMenuIdsStatement = `SELECT 
@@ -172,6 +193,12 @@ class RoleService {
       const finalMenu = getMenu(wholeMenu as Array<menuType>);
       return finalMenu;
     }
+  }
+
+  async getRoleTotalCount() {
+    const statement = `SELECT COUNT(*) totalCount FROM role;`;
+    const [result] = await connection.execute(statement);
+    return result;
   }
 }
 const roleService = new RoleService();
