@@ -17,6 +17,7 @@ class UserController {
     try {
       // 1.获取用户传递过来的信息
       const user = ctx.request.body as IUser;
+
       if (ctx.user.id !== 1 && (user.role_id === 1 || user.role_id === 2)) {
         return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
       }
@@ -33,13 +34,13 @@ class UserController {
     }
   }
   async update(ctx: Context) {
-    const { userId } = ctx.params;
     // 1.获取用户传递过来的信息
-    if (Number(userId) === 1) {
-      return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
-    }
     const user = ctx.request.body as IUser;
     const id = ctx.params.userId;
+    // 1.获取用户传递过来的信息
+    if (ctx.user.id !== 1 && (user.role_id === 1 || user.role_id === 2)) {
+      return ctx.app.emit("error", NO_PERMISSION_TO_OPERATE, ctx);
+    }
     // 3.将user的信息存入数据库
     const result = await userService.update(id, user);
     ctx.body = {
